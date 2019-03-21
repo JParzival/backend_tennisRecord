@@ -9,15 +9,6 @@ function obtenerPartidos(req, res)
     )
 }
 
-function obtenerPartido(req, res)
-{
-    res.status(200).send(
-        {
-            mensaje: `Devolviendo partido ${req.params.idPartido}`
-        }
-    )
-}
-
 function anadirPartido(req, res)
 {
     res.status(200).send(
@@ -39,7 +30,6 @@ function anadirTorneo(req, res)
 module.exports =
 {
     obtenerPartidos,
-    obtenerPartido,
     anadirPartido,
     anadirTorneo
 }

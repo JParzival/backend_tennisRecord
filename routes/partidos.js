@@ -8,7 +8,6 @@ let api = express.Router()
 // api.get para los GET, api.post para los POST
 
 api.get('/partidos', controladorPartidos.obtenerPartidos)
-api.get('/partidos/:idPartido', controladorPartidos.obtenerPartido)
 api.post('/partidos', controladorPartidos.anadirPartido)
 api.post('/torneo', controladorPartidos.anadirTorneo)
 

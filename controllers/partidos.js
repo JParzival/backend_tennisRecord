@@ -68,6 +68,7 @@ function anadirTorneo(req, res)
     if(params.nombreTorneo)
     {
         torneo.nombreTorneo = params.nombreTorneo
+        console.log(torneo.nombreTorneo)
 
         torneo.save((err, torneoGuardado) => {
             if (err) 
@@ -107,6 +108,7 @@ function anadirTorneo(req, res)
                 message: "Añade los campos necesarios (el nombre del torneo) para que se pueda guardar al menos"
             }
         )
+        console.log("No ha recibido nada")
     }
 }
 

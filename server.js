@@ -18,6 +18,7 @@ app.use(function(req, res, next)
     next();
 })
 
+app.use(express.static("dist/TennisRecord"))
 app.use('/api', rutas)
 
 module.exports = app

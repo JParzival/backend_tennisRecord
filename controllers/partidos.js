@@ -103,12 +103,11 @@ function anadirTorneo(req, res)
     }
     else
     {
-        res.status(200).send(
+        res.status(204).send(
             {
                 message: "Añade los campos necesarios (el nombre del torneo) para que se pueda guardar al menos"
             }
         )
-        console.log("No ha recibido nada")
     }
 }
 

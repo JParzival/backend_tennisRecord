@@ -18,8 +18,6 @@ const TorneoSchema = new Schema({
             String
         }]
     }]
-
-
 })
 
 module.exports = mongoose.model('Torneo', TorneoSchema)

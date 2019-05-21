@@ -358,13 +358,13 @@ var IntroducirPartidoComponent = /** @class */ (function () {
         if (!torneo) {
             console.log("No hay torneo a medias, has entrado directamente a introducir resultado");
             //Buscar torneo metido en el campo select, recoger los partidos ya existentes, meter uno nuevo e introducirlo a allData
-            for (var _i = 0, allData_1 = allData; _i < allData_1.length; _i++) {
-                var tournament = allData_1[_i];
+            for (var _i = 0, _a = this.torneos; _i < _a.length; _i++) {
+                var tournament = _a[_i];
                 if (tournament.nombreTorneo == this.nombreTorneo) {
                     // saber en qué ronda estás
                     var rondas = tournament.rondasTorneo.length;
                     var participantesTorneo = tournament.participantesTorneo;
-                    var diferencia = Math.log2(participantesTorneo) - rondas;
+                    var diferencia = Math.log2(participantesTorneo) - rondas - 1;
                     switch (diferencia) {
                         case 0:
                             console.log("no queda torneo");
@@ -385,23 +385,24 @@ var IntroducirPartidoComponent = /** @class */ (function () {
                             this.nombreRonda = "Dieciseisavos";
                             break;
                         case 6:
-                            this.nombreRonda = "Te queda un mundo colega";
+                            this.nombreRonda = "Primera Ronda (128)";
                             break;
                     }
                     var nuevoPartido = new _modelos_partido__WEBPACK_IMPORTED_MODULE_3__["Partido"](1, this.nombreRonda, this.rivalPartido, this.fechaPartido, resultado);
                     console.log(nuevoPartido);
+                    tournament.rondasTorneo = [];
                     tournament.rondasTorneo.push(nuevoPartido);
                     console.log(tournament);
                     //borro el torneo anterior para que no se duplique...
                     this.partidosService.allData = this.partidosService.allData.filter(function (item) { return item.nombreTorneo !== _this.nombreTorneo; });
                     //introduzco el nuevo
-                    //this.partidosService.allData.push(tournament);
-                    this.partidosService.postear(JSON.stringify(tournament)).subscribe(function (response) { return console.log("Respuesta: " + response); }, function (err) { return console.log("Error: " + err); });
+                    this.partidosService.postearPartido(JSON.stringify(tournament)).subscribe(function (response) { return console.log("Respuesta: " + response); }, function (err) { return console.log("Error: " + err); });
                     break;
                 }
             }
         }
         else {
+            console.log("Hay torneo a medias hecho");
             torneo.rondasTorneo = [];
             switch (torneo.participantesTorneo) {
                 case "8":
@@ -417,12 +418,13 @@ var IntroducirPartidoComponent = /** @class */ (function () {
                     this.nombreRonda = "Primera Ronda";
                     break;
                 case "128":
-                    this.nombreRonda = "Primera Ronda";
+                    this.nombreRonda = "Primera Ronda (128)";
                     break;
             }
             var nuevoPartido = new _modelos_partido__WEBPACK_IMPORTED_MODULE_3__["Partido"](1, this.nombreRonda, this.rivalPartido, this.fechaPartido, resultado);
             torneo.rondasTorneo.push(nuevoPartido);
             //this.partidosService.allData.push(torneo);
+            this.partidosService.dataAMedias = null;
             this.partidosService.postear(JSON.stringify(torneo)).subscribe(function (response) { return console.log(response); }, function (err) { return console.log(err); });
         }
     };
@@ -678,6 +680,10 @@ var PartidosService = /** @class */ (function () {
         console.log("Posteamos! : " + tournament);
         return this.http.post('/api/torneo', tournament, httpOptions);
     };
+    PartidosService.prototype.postearPartido = function (tournament) {
+        console.log("Posteamos partido!: " + tournament);
+        return this.http.post('/api/partido', tournament, httpOptions);
+    };
     PartidosService.prototype.obtenerAllData = function () {
         return this.allData;
     };
@@ -763,7 +769,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n  <head>\r\n\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\r\n\r\n    <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\">\r\n    <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>\r\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js\" integrity=\"sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49\" crossorigin=\"anonymous\"></script>\r\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js\" integrity=\"sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy\" crossorigin=\"anonymous\"></script>\r\n\r\n  </head>\r\n\r\n  <body>\r\n\r\n    <br>\r\n    <br>\r\n    <br>\r\n\r\n    <div id=\"container\" class=\"container-fluid\">\r\n\r\n      <div class=\"row\">\r\n\r\n        <main role=\"main\" class=\"col-md-12 ml-sm-auto col-lg-12 px-4\">\r\n    \r\n          <h2>Mis Últimos Partidos</h2>\r\n\r\n          <div class=\"table-responsive\">\r\n            \r\n            <table class=\"table table-striped table-sm\">\r\n\r\n              <thead>\r\n\r\n                <tr>\r\n                  <!--<th>#</th>-->\r\n                  <th>Fecha</th>\r\n                  <th>Torneo</th>\r\n                  <th>Localización</th>\r\n                  <th>Participantes</th>\r\n                  <th>Ronda</th>\r\n                  <th>Rival</th>\r\n                  <th>Resultado</th>\r\n                </tr>\r\n                \r\n              </thead>\r\n              \r\n              <br>\r\n\r\n              <div *ngFor='let torneo of torneos'>\r\n\r\n                <tbody>\r\n                \r\n                  <tr *ngFor='let ronda of torneo.rondasTorneo'>\r\n\r\n                    <!--<td>{{ronda.numero}}</td>-->\r\n\r\n                    <td>{{ronda.fechaPartido}}</td>\r\n\r\n                    <td>{{torneo.nombreTorneo}}</td>\r\n                          \r\n                    <td>{{torneo.localizacionTorneo}}</td>\r\n\r\n                    <td>{{torneo.participantesTorneo}}</td>\r\n    \r\n                    <td>{{ronda.nombreRonda}}</td>\r\n      \r\n                    <td>{{ronda.rivalPartido}}</td>\r\n                      \r\n                    <td *ngFor='let resultado of ronda.resultado'>\r\n                      {{resultado[0]}} {{resultado[1]}} {{resultado[2]}}\r\n                    </td>\r\n                      \r\n                  </tr>\r\n\r\n                </tbody>\r\n\r\n              </div>\r\n\r\n            </table>\r\n            \r\n          </div>\r\n\r\n        </main>\r\n\r\n      </div>\r\n\r\n    </div>\r\n\r\n  </body>\r\n\r\n</html>\r\n"
+module.exports = "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n  <head>\r\n\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\r\n\r\n    <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\">\r\n    <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>\r\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js\" integrity=\"sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49\" crossorigin=\"anonymous\"></script>\r\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js\" integrity=\"sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy\" crossorigin=\"anonymous\"></script>\r\n\r\n  </head>\r\n\r\n  <body>\r\n\r\n    <br>\r\n    <br>\r\n    <br>\r\n\r\n    <div id=\"container\" class=\"container-fluid\">\r\n\r\n      <div class=\"row\">\r\n\r\n        <main role=\"main\" class=\"col-md-12 ml-sm-auto col-lg-12 px-4\">\r\n    \r\n          <h2>Mis Últimos Partidos</h2>\r\n\r\n          <div class=\"table-responsive\">\r\n            \r\n            <table class=\"table table-striped table-sm\">\r\n\r\n            <div *ngFor='let torneo of torneos'>\r\n              <br>\r\n              <thead>\r\n\r\n                <tr>\r\n                  <th>Fecha</th>\r\n                  <th>Torneo</th>\r\n                  <th>Localización</th>\r\n                  <th>Participantes</th>\r\n                  <th>Ronda</th>\r\n                  <th>Rival</th>\r\n                  <th>Resultado</th>\r\n                </tr>\r\n                \r\n              </thead>\r\n              \r\n              <br>\r\n\r\n                <tbody>\r\n                \r\n                  <tr *ngFor='let ronda of torneo.rondasTorneo'>\r\n\r\n                    <td>{{ronda.fechaPartido}}</td>\r\n\r\n                    <td>{{torneo.nombreTorneo}}</td>\r\n                          \r\n                    <td>{{torneo.localizacionTorneo}}</td>\r\n\r\n                    <td>{{torneo.participantesTorneo}}</td>\r\n    \r\n                    <td>{{ronda.nombreRonda}}</td>\r\n      \r\n                    <td>{{ronda.rivalPartido}}</td>\r\n                      \r\n                    <td *ngFor='let resultado of ronda.resultado'>\r\n                      {{resultado[0]}} {{resultado[1]}} {{resultado[2]}}\r\n                    </td>\r\n                      \r\n                  </tr>\r\n\r\n            </tbody>\r\n\r\n          </div>\r\n            </table>\r\n            \r\n          </div>\r\n\r\n        </main>\r\n\r\n      </div>\r\n\r\n    </div>\r\n\r\n  </body>\r\n\r\n</html>\r\n"
 
 /***/ }),
 

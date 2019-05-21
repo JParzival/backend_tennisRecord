@@ -10,5 +10,6 @@ let api = express.Router()
 api.get('/torneos', controladorPartidos.obtenerTorneos)
 api.get('/torneo/:idTorneo', controladorPartidos.obtenerTorneo)
 api.post('/torneo', controladorPartidos.anadirTorneo)
+api.post('/partido', controladorPartidos.anadirPartido)
 
 module.exports = api

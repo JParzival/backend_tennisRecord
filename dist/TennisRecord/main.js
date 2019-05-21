@@ -364,7 +364,7 @@ var IntroducirPartidoComponent = /** @class */ (function () {
                     // saber en qué ronda estás
                     var rondas = tournament.rondasTorneo.length;
                     var participantesTorneo = tournament.participantesTorneo;
-                    var diferencia = Math.log2(participantesTorneo) - rondas - 1;
+                    var diferencia = Math.log2(participantesTorneo) - rondas;
                     switch (diferencia) {
                         case 0:
                             console.log("no queda torneo");

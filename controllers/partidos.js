@@ -67,8 +67,39 @@ function anadirTorneo(req, res)
 
     if(params.nombreTorneo)
     {
+        let misRondasTorneo = params.rondasTorneo
+
         torneo.nombreTorneo = params.nombreTorneo
-        console.log(torneo.nombreTorneo)
+        torneo.participantesTorneo = params.participantesTorneo
+        torneo.localizacionTorneo = params.localizacionTorneo
+        torneo.rondasTorneo = []
+
+        let rondasTorneo = new Object()
+        let resultado = new Array()
+
+        rondasTorneo.numero = misRondasTorneo[0].numero
+        rondasTorneo.nombreRonda = misRondasTorneo[0].nombreRonda
+        rondasTorneo.rivalPartido = misRondasTorneo[0].rivalPartido
+        rondasTorneo.fechaPartido = misRondasTorneo[0].fechaPartido
+
+        rondasTorneo.resultado = new Array()
+        /*resultado = misRondasTorneo[0].resultado*/
+        rondasTorneo.resultado[0] = misRondasTorneo[0].resultado[0] + misRondasTorneo[0].resultado[1] + misRondasTorneo[0].resultado[2]
+        rondasTorneo.resultado[1] = misRondasTorneo[0].resultado[4] + misRondasTorneo[0].resultado[5] + misRondasTorneo[0].resultado[6]
+        rondasTorneo.resultado[2] = misRondasTorneo[0].resultado[8] + misRondasTorneo[0].resultado[9] + misRondasTorneo[0].resultado[10]
+        
+        torneo.rondasTorneo = rondasTorneo
+
+        console.log('----------------------------------')
+        console.log('Torneo completo -> ' + JSON.stringify(torneo))
+        console.log('----------------------------------')
+        /*console.log('RondasTorneo ->' + torneo.rondasTorneo)
+        console.log('----------------------------------')*/
+        console.log('Mis rondas torneo -> ', misRondasTorneo)
+        console.log('----------------------------------')
+        console.log('Mis rondas torneo resultados -> ', misRondasTorneo[0].resultado[0])
+        console.log('----------------------------------')
+        console.log('Individuales -> Número: ' + torneo.rondasTorneo[0].numero + ' Nombre Ronda: ' + torneo.rondasTorneo[0].nombreRonda + ' Resultado: ' + rondasTorneo.resultado[0])
 
         torneo.save((err, torneoGuardado) => {
             if (err) 

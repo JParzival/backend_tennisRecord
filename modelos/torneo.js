@@ -9,7 +9,7 @@ const TorneoSchema = new Schema({
     nombreTorneo: String,
     participantesTorneo: String,
     localizacionTorneo: String,
-    rondasTorneo:[{
+    /*rondasTorneo:[{
         numero: String,
         nombreRonda: String,
         rivalPartido: String,
@@ -17,7 +17,8 @@ const TorneoSchema = new Schema({
         resultado:[{
             String
         }]
-    }]
+    }]*/
+    rondasTorneo: Array
 })
 
 module.exports = mongoose.model('Torneo', TorneoSchema)
